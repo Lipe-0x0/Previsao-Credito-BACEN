@@ -1,2 +1,2 @@
-# Previsao-Credito-BACEN
+# Previsao de Credito dados BACEN
 
