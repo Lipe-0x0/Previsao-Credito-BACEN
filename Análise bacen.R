@@ -1,9 +1,6 @@
 rm(list = ls())
 
 library(tidyverse)
-library(e1071) # Pacote para aplicação do NAiveBayes (função NaiveBayes)
-library(caret) # Pacote para aplicação do NaiveBayes (função train)
-library(gmodels)
 
 
 #----------------------Importando dados BACEN (5 anos)-------------------------
