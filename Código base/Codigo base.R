@@ -1,11 +1,16 @@
 rm(list = ls())
 
 library(tidyverse)
+library(data.table)
 
 
 #----------------------Importando dados BACEN (5 anos)-------------------------
 
+# Armazena o caminho das planilhas
+arquivos = list.files(path = "C:/Users/lfgoliveira/Downloads/planilhas bacen", full.names = T)
 
+# Lê cada arquivo e combina-os em um só
+bacen = rbindlist(map(arquivos, fread))
 
 #----------------------Transformando e Alterando Variáveis-------------------------
 
