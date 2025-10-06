@@ -1,10 +1,22 @@
 rm(list = ls())
 
+install.packages("duckdb")
+install.packages("duckplyr")
+
+library(duckdb)
+library(duckplyr)
 library(tidyverse)
 library(data.table)
 
 
 #----------------------Importando dados BACEN (5 anos)-------------------------
+
+con = dbConnect(duckdb())
+
+dbGetQuery(con, "CREATE TABLE bacen AS
+    SELECT * FROM 'C:/Users/fan79/Downloads/planilha_2025/planilha_202501.csv'")
+
+dbListTables(con) # tabela bacen está aqui
 
 # Armazena o caminho das planilhas
 arquivos = list.files(path = "C:/Users/fan79/Downloads/planilhas bacen", full.names = T)
