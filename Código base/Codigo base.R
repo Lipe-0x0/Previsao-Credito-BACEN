@@ -13,16 +13,17 @@ library(data.table)
 
 con = dbConnect(duckdb())
 
-dbGetQuery(con, "CREATE TABLE bacen AS
-    SELECT * FROM 'C:/Users/fan79/Downloads/planilha_2025/planilha_202501.csv'")
+# Armazena o caminho das planilhas
+arquivos = list.files(path = "C:/Users/fan79/Downloads/plab", full.names = T)
+
+# Lê cada arquivo e combina-os em um só
+dbGetQuery(con, "CREATE TABLE bacen AS SELECT * FROM read_csv_auto('C:/Users/fan79/Downloads/plab/planilha*.csv',union_by_name = true)")
 
 dbListTables(con) # tabela bacen está aqui
 
-# Armazena o caminho das planilhas
-arquivos = list.files(path = "C:/Users/fan79/Downloads/planilhas bacen", full.names = T)
+dbGetQuery(con, "SELECT * FROM bacen")
 
-# Lê cada arquivo e combina-os em um só
-bacen = rbindlist(map(arquivos, fread))
+dbDisconnect(con)
 
 #----------------------Transformando e Alterando Variáveis-------------------------
 
