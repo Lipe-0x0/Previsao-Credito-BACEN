@@ -13,19 +13,27 @@ library(data.table)
 
 con = dbConnect(duckdb())
 
-# Armazena o caminho das planilhas
-arquivos = list.files(path = "C:/Users/fan79/Downloads/plab", full.names = T)
+# Transformar o arquivo em parquet para melhor performace
+dbGetQuery(con, "COPY (SELECT * FROM read_csv_auto('C:/Users/lfgoliveira/Downloads/planilha/planilha*.csv')) TO 'C:/Users/lfgoliveira/Downloads/output.parquet' (FORMAT PARQUET)")
 
 # Lê cada arquivo e combina-os em um só
-dbGetQuery(con, "CREATE TABLE bacen AS SELECT * FROM read_csv_auto('C:/Users/fan79/Downloads/plab/planilha*.csv',union_by_name = true)")
+dbGetQuery(con, "CREATE TABLE bacen AS SELECT * FROM read_parquet('C:/Users/lfgoliveira/Downloads/output.parquet',union_by_name = true)")
 
 dbListTables(con) # tabela bacen está aqui
 
-dbGetQuery(con, "SELECT * FROM bacen")
 
-dbDisconnect(con)
+#----------------------Lendo dados BACEN-------------------------
+
+
+dbGetQuery(con, "SELECT * FROM bacen LIMIT 10")
+
+dbGetQuery(con, "SELECT COUNT(*) FROM bacen WHERE uf IN ('AL','BA','CE','MA','PB','PE','PI','RN','SE') LIMIT 10")
+
+dbGetQuery(con, "SELECT COUNT(*) FROM bacen")
+
 
 #----------------------Transformando e Alterando Variáveis-------------------------
+
 
 # Verificando variáveis
 summary(bacen)
@@ -73,5 +81,8 @@ bacen$carteira_inadimplida_arrastada = as.factor(bacen$carteira_inadimplida_arra
 write.csv(bacen, file = "~/R/PROJETOS R/1º Hackaton Decat/Dados BACEN 2025.csv", na = "-", row.names = F) # coluna X é criada a partir daqui
 
 
+#----------------------Finalizando conexão DUCK-------------------------
+
+dbDisconnect(con)
 
 #----------------------------------------------------------------------------------------------
